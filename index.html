@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Health Check</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .status.ok {
+            color: #28a745;
+        }
+
+        .status.error {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Health Check</h1>
+        <button onclick="checkHealth()">Check API Status</button>
+        <p class="status" id="statusMessage"></p>
+    </div>
+
+    <script>
+        function checkHealth() {
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    const statusMessage = document.getElementById('statusMessage');
+                    if (data.status === "ok") {
+                        statusMessage.textContent = "API is healthy!";
+                        statusMessage.className = "status ok";
+                    } else {
+                        statusMessage.textContent = "API is not healthy.";
+                        statusMessage.className = "status error";
+                    }
+                })
+                .catch(error => {
+                    const statusMessage = document.getElementById('statusMessage');
+                    statusMessage.textContent = "Failed to connect to API.";
+                    statusMessage.className = "status error";
+                });
+        }
+    </script>
+</body>
+</html>
